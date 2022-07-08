@@ -9,3 +9,6 @@ run:
 
 migrate:
 	docker compose run --rm web bash -c 'rake db:migrate'
+
+test:
+	docker compose run --rm web bash -c 'rake test'
