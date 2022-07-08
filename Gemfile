@@ -17,9 +17,9 @@ gem 'state_machines'
 gem 'state_machines-activerecord'
 
 group :development, :test do
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'factory_bot_rails'
   gem 'rubocop'
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 
 group :development do
