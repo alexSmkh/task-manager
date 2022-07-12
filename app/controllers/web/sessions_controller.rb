@@ -8,7 +8,7 @@ class Web::SessionsController < Web::ApplicationController
 
     if @session.valid?
       sign_in(@session.user)
-      redirect(:board)
+      redirect_to(:board)
     else
       render(:new)
     end
@@ -17,7 +17,7 @@ class Web::SessionsController < Web::ApplicationController
   def destroy
     sign_out
 
-    redirect_to(:new)
+    redirect_to(new_session_path)
   end
 
   private
