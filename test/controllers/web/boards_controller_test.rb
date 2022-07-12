@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class Web::BoardsControllerTest < ActionDispatch::IntegrationTest
+class Web::BoardsControllerTest < ActionController::TestCase
   test 'should get show' do
-    get board_path
+    get :show
     assert_response :success
   end
 end
