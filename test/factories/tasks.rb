@@ -1,9 +1,8 @@
 FactoryBot.define do
   factory :task do
-    name
-    description
-    author factory: :manager
-    assignee factory: :developer
-    state { 'new_task' }
+    name { generate :string }
+    description { generate :string }
+    author { create(:user) }
+    assignee { create(:user) }
   end
 end
