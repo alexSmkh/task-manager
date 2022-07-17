@@ -34,5 +34,10 @@ class Admin::UsersControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
-  test 'should patch'
+  test 'should patch update' do
+    user = create(:user)
+    user_attrs = attributes_for(:user)
+    patch :update, params: { id: user.id, user: user_attrs }
+    assert_response :redirect
+  end
 end
