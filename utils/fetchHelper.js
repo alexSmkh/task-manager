@@ -1,7 +1,7 @@
 import axios from 'axios';
 import qs from 'qs';
 
-import { camelize, decamelize } from 'humps';
+import { camelize, decamelize } from './keysConverter';
 
 const authenticityToken = () => {
   const token = document.querySelector('meta[name="csrf-token"]');
