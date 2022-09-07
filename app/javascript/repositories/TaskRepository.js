@@ -1,4 +1,4 @@
-import routes from 'routes';
+import routes from '../routes/index';
 import FetchHelper from '../../../utils/fetchHelper';
 
 export default {
