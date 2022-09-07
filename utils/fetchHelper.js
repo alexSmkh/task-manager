@@ -19,7 +19,7 @@ axios.defaults.headers.post = headers();
 axios.defaults.headers.put = headers();
 axios.defaults.headers.delete = headers();
 
-axios.interseptors.response.use(null, (error) => {
+axios.interceptors.response.use(null, (error) => {
   const {
     response: { status },
   } = error;
