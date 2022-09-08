@@ -26,7 +26,7 @@ const initialBoard = {
 
 function TaskBoard() {
   const [board, setBoard] = useState(initialBoard);
-  const [boardCards, setBoardCards] = useState([]);
+  const [boardCards, setBoardCards] = useState({});
 
   const loadColumn = (state, page, perPage) => TaskRepository.index({ q: { stateEq: state }, page, perPage });
 
@@ -41,7 +41,7 @@ function TaskBoard() {
 
   const generateBoard = () => {
     setBoard({
-      column: STATES.map(({ key, value }) => ({
+      columns: STATES.map(({ key, value }) => ({
         id: key,
         title: value,
         cards: propOr({}, 'cards', boardCards[key]),
