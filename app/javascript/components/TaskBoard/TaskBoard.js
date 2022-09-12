@@ -7,7 +7,8 @@ import { propOr } from 'ramda';
 import Task from 'components/Task';
 import ColumnHeader from 'components/ColumnHeader';
 import AddPopup from 'components/AddPopup';
-import TaskRepository from 'repositories/TaskRepository';
+import EditPopup from 'components/EditPopup';
+import TasksRepository from 'repositories/TasksRepository';
 import TaskForm from 'forms/TaskForm';
 import useStyles from './useStyles';
 
@@ -24,6 +25,7 @@ const STATES = [
 const MODES = {
   ADD: 'add',
   NONE: 'none',
+  EDIT: 'edit',
 };
 
 const initialBoard = {
@@ -40,8 +42,9 @@ function TaskBoard() {
   const [board, setBoard] = useState(initialBoard);
   const [boardCards, setBoardCards] = useState({});
   const [mode, setMode] = useState(MODES.NONE);
+  const [openedTaskId, setOpenTaskId] = useState(null);
 
-  const loadColumn = (state, page, perPage) => TaskRepository.index({ q: { stateEq: state }, page, perPage });
+  const loadColumn = (state, page, perPage) => TasksRepository.index({ q: { stateEq: state }, page, perPage });
 
   const loadColumnMore = (state, page, perPage = 10) => {
     loadColumn(state, page, perPage).then(({ data }) => {
@@ -78,16 +81,12 @@ function TaskBoard() {
 
   useEffect(() => generateBoard(), [boardCards]);
 
-  const renderCard = (card) => <Task task={card} />;
-
-  const renderColumnHeader = (column) => <ColumnHeader column={column} onLoadMore={loadColumnMore} />;
-
   const handleCardDragEnd = (task, source, destination) => {
     const transition = task.transitions.find(({ to }) => destination.toColumnId === to);
 
     if (!transition) return null;
 
-    return TaskRepository.update(task.id, { stateEvent: transition.event })
+    return TasksRepository.update(task.id, { stateEvent: transition.event })
       .then(() => {
         loadColumnInitial(destination.toColumnId);
         loadColumnInitial(source.fromColumnId);
@@ -100,18 +99,47 @@ function TaskBoard() {
 
   const handleOpenAddPopup = () => setMode(MODES.ADD);
 
+  const handleOpenEditPopup = (task) => {
+    setOpenTaskId(task.id);
+    setMode(MODES.EDIT);
+  };
+
   const handleCloseAddPopup = () => setMode(MODES.NONE);
+
+  const handleCloseEditPopup = () => {
+    setMode(MODES.NONE);
+    setOpenTaskId(null);
+  };
 
   const handleTaskCreate = (params) => {
     const attrs = TaskForm.attributesToSubmit(params);
 
-    return TaskRepository.create(attrs).then(({ data: { task } }) => {
-      const page = 1;
-      const perPage = 10;
-      loadColumn(task.state, page, perPage);
+    return TasksRepository.create(attrs).then(({ data: { task } }) => {
+      loadColumnInitial(task.state);
       handleCloseAddPopup();
     });
   };
+
+  const loadTask = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
+
+  const handleTaskUpdate = (task) => {
+    const attrs = TaskForm.attributesToSubmit(task);
+
+    return TasksRepository.update(task.id, attrs).then(() => {
+      loadColumnInitial(task.state);
+      handleCloseAddPopup();
+    });
+  };
+
+  const handleTaskDestroy = (task) =>
+    TasksRepository.destroy(task.id).then(() => {
+      loadColumnInitial(task.state);
+      handleCloseEditPopup();
+    });
+
+  const renderCard = (card) => <Task onClick={handleOpenEditPopup} task={card} />;
+
+  const renderColumnHeader = (column) => <ColumnHeader column={column} onLoadMore={loadColumnMore} />;
 
   return (
     <>
@@ -127,6 +155,15 @@ function TaskBoard() {
         <AddIcon />
       </Fab>
       {mode === MODES.ADD && <AddPopup onCreateCard={handleTaskCreate} onClose={handleCloseAddPopup} />}
+      {mode === MODES.EDIT && (
+        <EditPopup
+          onLoadCard={loadTask}
+          onCardDestroy={handleTaskDestroy}
+          onCardUpdate={handleTaskUpdate}
+          onClose={handleCloseEditPopup}
+          cardId={openedTaskId}
+        />
+      )}
     </>
   );
 }
