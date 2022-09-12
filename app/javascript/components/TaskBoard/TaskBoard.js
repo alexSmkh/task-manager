@@ -6,7 +6,9 @@ import { propOr } from 'ramda';
 
 import Task from 'components/Task';
 import ColumnHeader from 'components/ColumnHeader';
+import AddPopup from 'components/AddPopup';
 import TaskRepository from 'repositories/TaskRepository';
+import TaskForm from 'forms/TaskForm';
 import useStyles from './useStyles';
 
 const STATES = [
@@ -18,6 +20,11 @@ const STATES = [
   { key: 'released', value: 'Released' },
   { key: 'archived', value: 'Archived' },
 ];
+
+const MODES = {
+  ADD: 'add',
+  NONE: 'none',
+};
 
 const initialBoard = {
   columns: STATES.map((column) => ({
@@ -32,6 +39,7 @@ function TaskBoard() {
   const styles = useStyles();
   const [board, setBoard] = useState(initialBoard);
   const [boardCards, setBoardCards] = useState({});
+  const [mode, setMode] = useState(MODES.NONE);
 
   const loadColumn = (state, page, perPage) => TaskRepository.index({ q: { stateEq: state }, page, perPage });
 
@@ -90,6 +98,21 @@ function TaskBoard() {
       });
   };
 
+  const handleOpenAddPopup = () => setMode(MODES.ADD);
+
+  const handleCloseAddPopup = () => setMode(MODES.NONE);
+
+  const handleTaskCreate = (params) => {
+    const attrs = TaskForm.attributesToSubmit(params);
+
+    return TaskRepository.create(attrs).then(({ data: { task } }) => {
+      const page = 1;
+      const perPage = 10;
+      loadColumn(task.state, page, perPage);
+      handleCloseAddPopup();
+    });
+  };
+
   return (
     <>
       <KanbanBoard
@@ -100,9 +123,10 @@ function TaskBoard() {
       >
         {board}
       </KanbanBoard>
-      <Fab className={styles.addButton} color="primary" aria-label="add">
+      <Fab className={styles.addButton} onClick={handleOpenAddPopup} color="primary" aria-label="add">
         <AddIcon />
       </Fab>
+      {mode === MODES.ADD && <AddPopup onCreateCard={handleTaskCreate} onClose={handleCloseAddPopup} />}
     </>
   );
 }
