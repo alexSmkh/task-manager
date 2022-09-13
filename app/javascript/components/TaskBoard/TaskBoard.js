@@ -44,7 +44,8 @@ function TaskBoard() {
   const [mode, setMode] = useState(MODES.NONE);
   const [openedTaskId, setOpenTaskId] = useState(null);
 
-  const loadColumn = (state, page, perPage) => TasksRepository.index({ q: { stateEq: state }, page, perPage });
+  const loadColumn = (state, page, perPage) =>
+    TasksRepository.index({ q: { stateEq: state, s: 'created_at DESC' }, page, perPage });
 
   const loadColumnMore = (state, page, perPage = 10) => {
     loadColumn(state, page, perPage).then(({ data }) => {
