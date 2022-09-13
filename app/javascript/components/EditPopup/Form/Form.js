@@ -7,6 +7,7 @@ import UserSelect from 'components/UserSelect';
 import TextField from '@material-ui/core/TextField';
 
 import useStyles from './useStyles';
+import TaskPresenter from 'presenters/TaskPresenter';
 
 function Form({ errors, onChange, task }) {
   const styles = useStyles();
@@ -21,7 +22,7 @@ function Form({ errors, onChange, task }) {
         error={has('name', errors)}
         helperText={errors.name}
         onChange={handleChangeTextField('name')}
-        value={task.name}
+        value={TaskPresenter.name(task)}
         label="Name"
         required
         margin="dense"
@@ -30,7 +31,7 @@ function Form({ errors, onChange, task }) {
         error={has('description', errors)}
         helperText={errors.description}
         onChange={handleChangeTextField('description')}
-        value={task.description}
+        value={TaskPresenter.description(task)}
         label="Description"
         required
         multiline
@@ -38,7 +39,7 @@ function Form({ errors, onChange, task }) {
       />
       <UserSelect
         label="Author"
-        value={task.author}
+        value={TaskPresenter.author(task)}
         onChange={handleChangeSelect('author')}
         isDisabled
         isRequired
@@ -47,7 +48,7 @@ function Form({ errors, onChange, task }) {
       />
       <UserSelect
         label="Assignee"
-        value={task.assignee}
+        value={TaskPresenter.assignee(task)}
         onChange={handleChangeSelect('assignee')}
         isDisabled={false}
         isRequired
@@ -60,7 +61,7 @@ function Form({ errors, onChange, task }) {
 
 Form.propTypes = {
   onChange: PropTypes.func.isRequired,
-  task: PropTypes.shape().isRequired,
+  task: TaskPresenter.shape().isRequired,
   errors: PropTypes.shape({
     name: PropTypes.arrayOf(PropTypes.string),
     description: PropTypes.arrayOf(PropTypes.string),
