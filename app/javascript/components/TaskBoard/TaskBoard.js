@@ -11,7 +11,7 @@ import EditPopup from 'components/EditPopup';
 import TasksRepository from 'repositories/TasksRepository';
 import TaskForm from 'forms/TaskForm';
 import useStyles from './useStyles';
-import TaskPresenter from '../../presenters/TaskPresenter';
+import TaskPresenter from 'presenters/TaskPresenter';
 
 const STATES = [
   { key: 'new_task', value: 'New' },
