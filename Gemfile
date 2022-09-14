@@ -9,6 +9,7 @@ gem 'active_model_serializers'
 gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'jbuilder', '~> 2.7'
+gem 'js-routes'
 gem 'kaminari'
 gem 'pg', '~> 1.1'
 gem 'puma', '~> 5.0'
