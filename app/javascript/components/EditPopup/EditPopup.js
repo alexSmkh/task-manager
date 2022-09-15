@@ -50,6 +50,7 @@ function EditPopup({ cardId, onClose, onCardDestroy, onLoadCard, onCardUpdate })
       })
       .finally(() => setSaving(false));
   };
+
   const isLoading = isNil(task);
 
   return (

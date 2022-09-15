@@ -11,6 +11,7 @@ import EditPopup from 'components/EditPopup';
 import TasksRepository from 'repositories/TasksRepository';
 import TaskForm from 'forms/TaskForm';
 import useStyles from './useStyles';
+import TaskPresenter from 'presenters/TaskPresenter';
 
 const STATES = [
   { key: 'new_task', value: 'New' },
@@ -83,7 +84,7 @@ function TaskBoard() {
   useEffect(() => generateBoard(), [boardCards]);
 
   const handleCardDragEnd = (task, source, destination) => {
-    const transition = task.transitions.find(({ to }) => destination.toColumnId === to);
+    const transition = TaskPresenter.transitions(task).find(({ to }) => destination.toColumnId === to);
 
     if (!transition) return null;
 
@@ -101,7 +102,7 @@ function TaskBoard() {
   const handleOpenAddPopup = () => setMode(MODES.ADD);
 
   const handleOpenEditPopup = (task) => {
-    setOpenTaskId(task.id);
+    setOpenTaskId(TaskPresenter.id(task));
     setMode(MODES.EDIT);
   };
 
@@ -116,7 +117,7 @@ function TaskBoard() {
     const attrs = TaskForm.attributesToSubmit(params);
 
     return TasksRepository.create(attrs).then(({ data: { task } }) => {
-      loadColumnInitial(task.state);
+      loadColumnInitial(TaskPresenter.state(task));
       handleCloseAddPopup();
     });
   };
@@ -126,15 +127,15 @@ function TaskBoard() {
   const handleTaskUpdate = (task) => {
     const attrs = TaskForm.attributesToSubmit(task);
 
-    return TasksRepository.update(task.id, attrs).then(() => {
-      loadColumnInitial(task.state);
+    return TasksRepository.update(TaskPresenter.id(task), attrs).then(() => {
+      loadColumnInitial(TaskPresenter.state(task));
       handleCloseAddPopup();
     });
   };
 
   const handleTaskDestroy = (task) =>
-    TasksRepository.destroy(task.id).then(() => {
-      loadColumnInitial(task.state);
+    TasksRepository.destroy(TaskPresenter.id(task)).then(() => {
+      loadColumnInitial(TaskPresenter.state(task));
       handleCloseEditPopup();
     });
 
