@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import KanbanBoard from '@asseinfo/react-kanban';
+import '@asseinfo/react-kanban/dist/styles.css';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -20,7 +21,7 @@ const MODES = {
 };
 
 function TaskBoard() {
-  const { board, loadBoard, loadMore, createTask, updateTask, destroyTask, loadTask, dragCard } = useTasks();
+  const { board, loadBoard, loadMore, createTask, updateTask, destroyTask, loadTask, dragTask } = useTasks();
   const [mode, setMode] = useState(MODES.NONE);
   const [openedTaskId, setOpenedTaskId] = useState(null);
   const styles = useStyles();
@@ -46,7 +47,7 @@ function TaskBoard() {
   const loadColumnMore = (state, page = 1, perPage = 10) => loadMore(state, page, perPage);
 
   const handleCardDragEnd = (task, source, destination) => {
-    dragCard(task, source, destination).catch((error) => {
+    dragTask(task, source, destination).catch((error) => {
       // eslint-disable-next-line no-alert
       alert(`Move failed! ${error.message}`);
     });
