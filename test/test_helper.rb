@@ -6,7 +6,10 @@ require 'simplecov'
 require_relative '../config/environment'
 require 'rails/test_help'
 
-SimpleCov.Formatter = Coveralls::SimpleCov::Formatter
+if ENV['COVERAGE']
+  SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+end
+
 SimpleCov.start('rails')
 
 class ActiveSupport::TestCase
