@@ -34,7 +34,7 @@ const useTasks = () => {
   const loadTask = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
 
   const dragTask = (task, source, destination) => {
-    const transition = TaskPresenter.transitions.find(({ to }) => destination.toColumnId === to);
+    const transition = TaskPresenter.transitions(task).find(({ to }) => destination.toColumnId === to);
 
     if (!transition) return null;
 
