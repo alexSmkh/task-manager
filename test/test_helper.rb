@@ -16,5 +16,7 @@ class ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
   include AuthHelper
 
+  parallelize(workers: :number_of_processors)
+
   fixtures :all
 end
