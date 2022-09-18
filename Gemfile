@@ -37,7 +37,9 @@ end
 
 group :test do
   gem 'capybara', '>= 3.26'
+  gem 'coveralls_reborn', '~> 0.25.0', require: false
   gem 'selenium-webdriver'
+  gem 'simplecov', require: false
   gem 'webdrivers'
 end
 

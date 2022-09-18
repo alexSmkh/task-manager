@@ -11,10 +11,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: ci
     steps:
       - uses: actions/checkout@v2
       - name: Run tests
         env:
+          CI: true
           COVERAGE: true
           RAILS_ENV: test
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: docker-compose --file docker-compose.ci.yml run ci
