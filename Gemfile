@@ -11,6 +11,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'jbuilder', '~> 2.7'
 gem 'js-routes'
 gem 'kaminari'
+gem 'newrelic_rpm'
 gem 'pg', '~> 1.1'
 gem 'puma', '~> 5.0'
 gem 'ransack', github: 'activerecord-hackery/ransack', branch: 'main'
