@@ -23,6 +23,10 @@ gem 'state_machines-activerecord'
 gem 'webpacker', '~> 5.0'
 gem 'webpacker-react', '~> 0.3.2'
 
+group :production, :development do
+  gem 'rollbar'
+end
+
 group :development, :test do
   gem 'bullet'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
