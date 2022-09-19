@@ -13,6 +13,7 @@ end
 SimpleCov.start('rails')
 
 class ActiveSupport::TestCase
+  include ActionMailer::TestHelper
   include FactoryBot::Syntax::Methods
   include AuthHelper
 
