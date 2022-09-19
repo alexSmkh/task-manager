@@ -24,6 +24,7 @@ gem 'webpacker', '~> 5.0'
 gem 'webpacker-react', '~> 0.3.2'
 
 group :production, :development do
+  gem 'dotenv-rails'
   gem 'rollbar'
 end
 
