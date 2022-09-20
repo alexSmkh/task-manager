@@ -107,6 +107,10 @@ GEM
       tins (~> 1.16)
     crass (1.0.6)
     docile (1.4.0)
+    dotenv (2.8.1)
+    dotenv-rails (2.8.1)
+      dotenv (= 2.8.1)
+      railties (>= 3.2)
     erubi (1.10.0)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
@@ -316,6 +320,7 @@ DEPENDENCIES
   byebug
   capybara (>= 3.26)
   coveralls_reborn (~> 0.25.0)
+  dotenv-rails
   factory_bot_rails
   jbuilder (~> 2.7)
   js-routes
