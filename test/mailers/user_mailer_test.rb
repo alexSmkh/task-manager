@@ -1,29 +1,39 @@
 require 'test_helper'
 
 class UserMailerTest < ActionMailer::TestCase
+  setup do
+    @user = create(:user)
+    @task = create(:task, author: @user)
+    @params = { user: @user, task: @task }
+  end
+
   test 'task created' do
-    user = create(:user)
-    task = create(:task, author: user)
-    params = { user: user, task: task }
-    email = UserMailer.with(params).task_created
+    email = UserMailer.with(@params).task_created
 
     assert_emails(1) { email.deliver_now }
     assert_equal ['noreply@taskmanager.com'], email.from
-    assert_equal [user.email], email.to
+    assert_equal [@user.email], email.to
     assert_equal 'New Task Created', email.subject
-    assert email.body.to_s.include?("Task #{task.id} was created")
+    assert email.body.to_s.include?("Task #{@task.id} was created")
   end
 
   test 'task updated' do
-    user = create(:user)
-    task = create(:task, author: user)
-    params = { user: user, task: task }
-    email = UserMailer.with(params).task_updated
+    email = UserMailer.with(@params).task_updated
 
     assert_emails(1) { email.deliver_now }
     assert_equal ['noreply@taskmanager.com'], email.from
-    assert_equal [user.email], email.to
+    assert_equal [@user.email], email.to
     assert_equal 'Task Was Updated', email.subject
-    assert email.body.to_s.include?("Task #{task.id} was updated")
+    assert email.body.to_s.include?("Task #{@task.id} was updated")
+  end
+
+  test 'task deleted' do
+    email = UserMailer.with(@params).task_deleted
+
+    assert_emails(1) { email.deliver_now }
+    assert_equal ['noreply@taskmanager.com'], email.from
+    assert_equal [@user.email], email.to
+    assert_equal 'Task Was Deleted', email.subject
+    assert email.body.to_s.include?("Task #{@task.id} was deleted")
   end
 end
