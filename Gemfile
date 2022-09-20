@@ -28,7 +28,6 @@ gem 'webpacker-react', '~> 0.3.2'
 group :development, :test do
   gem 'bullet'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'dotenv-rails'
   gem 'factory_bot_rails'
   gem 'rubocop'
 end
