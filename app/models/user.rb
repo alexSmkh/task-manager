@@ -18,8 +18,9 @@ class User < ApplicationRecord
   end
 
   def delete_password_reset_token
-    update_attribute(:reset_token, nil)
-    update_attribute(:reset_token_expiration, nil)
+    self.reset_token = nil
+    self.reset_token_expiration = nil
+    save
   end
 
   def password_reset_token_expired?
