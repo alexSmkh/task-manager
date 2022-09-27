@@ -14,7 +14,13 @@
 
    body
      = javascript_packs_with_chunks_tag 'application'
+
+
      header.mdl-layout__header
+       - if flash[:alert].present?
+        .mdl-layout__header style="background: #ebe7e5; color: black"
+          .mdl-layout__header-row
+             = alert
        .mdl-layout__header-row
          .material-icons tab
          label.mdl-button.mdl-js-button.mdl-button--icon

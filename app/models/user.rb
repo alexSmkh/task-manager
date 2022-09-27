@@ -10,4 +10,19 @@ class User < ApplicationRecord
             presence: true,
             uniqueness: true,
             format: { with: URI::MailTo::EMAIL_REGEXP }
+
+  def create_password_reset_token
+    self.reset_token = SecureRandom.urlsafe_base64
+    self.reset_token_expiration = 24.hours.from_now
+    save
+  end
+
+  def delete_password_reset_token
+    update_attribute(:reset_token, nil)
+    update_attribute(:reset_token_expiration, nil)
+  end
+
+  def password_reset_token_expired?
+    Time.zone.now.after?(reset_token_expiration)
+  end
 end

@@ -1,4 +1,4 @@
-lint: 
+lint:
 	bundle exec rubocop .
 
 format:
