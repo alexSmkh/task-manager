@@ -5,9 +5,10 @@ Rails.application.routes.draw do
 
   scope module: :web do
     resource :board, only: :show
-    resource :session, only: [:new, :create, :destroy]
-    resource :password_resets, only: [:new, :create, :edit, :update]
     resources :developers, only: [:new, :create]
+    resource :password, only: [:new, :edit]
+    resource :password_resets, only: [:create, :update]
+    resource :session, only: [:new, :create, :destroy]
   end
 
   namespace :admin do

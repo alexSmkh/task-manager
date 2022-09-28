@@ -1,8 +1,4 @@
 class Web::PasswordResetsController < Web::ApplicationController
-  def new
-    @password_reset_form = PasswordResetForm.new
-  end
-
   def create
     password_reset_form = PasswordResetForm.new(password_reset_params)
     user = User.find_by(email: password_reset_form.email)
@@ -16,20 +12,6 @@ class Web::PasswordResetsController < Web::ApplicationController
     end
   end
 
-  def edit
-    @token = params[:token]
-
-    user = @token.present? && User.find_by(reset_token: @token)
-
-    if user.blank?
-      redirect_to(new_password_resets_path, alert: 'Your reset link is invalid.')
-    elsif user.password_reset_token_expired?
-      redirect_to(new_password_resets_path, alert: 'Your reset link has expired.')
-    end
-
-    @new_password_form = NewPasswordForm.new
-  end
-
   def update
     token = params[:token]
 
@@ -39,7 +21,7 @@ class Web::PasswordResetsController < Web::ApplicationController
       user.delete_password_reset_token
       redirect_to(new_session_path, alert: 'Your password was reset successfully! Please sign in.')
     else
-      redirect_to(new_password_resets_path, alert: 'Something was wrong. Please try again')
+      redirect_to(new_password_path, alert: 'Something was wrong. Please try again')
     end
   end
 
