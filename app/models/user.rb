@@ -13,17 +13,17 @@ class User < ApplicationRecord
 
   def create_password_reset_token
     self.reset_token = SecureRandom.urlsafe_base64
-    self.reset_token_expiration = 24.hours.from_now
+    self.reset_token_expires_at = 24.hours.from_now
     save
   end
 
   def delete_password_reset_token
     self.reset_token = nil
-    self.reset_token_expiration = nil
+    self.reset_token_expires_at = nil
     save
   end
 
   def password_reset_token_expired?
-    Time.zone.now.after?(reset_token_expiration)
+    Time.zone.now.after?(reset_token_expires_at)
   end
 end
