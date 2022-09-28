@@ -1,15 +1,6 @@
 class NewPasswordForm
   include ActiveModel::Model
+  include ActiveModel::SecurePassword
 
-  validates :password, presence: true
-  validates :password_confirmation, presence: true
-  validate :same?
-
-  private
-
-  def same?
-    if password != password_confirmation
-      errors.add(:password, 'Passwords doesn\'t match')
-    end
-  end
+  has_secure_password
 end
