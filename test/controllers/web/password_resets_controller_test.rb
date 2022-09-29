@@ -12,8 +12,9 @@ class Web::PasswordResetsControllerTest < ActionController::TestCase
   test 'should update password' do
     user = create(:user)
     user.create_password_reset_token
+    reset_token = user.reset_token
 
-    patch :update, params: { new_password_form: { password: 123, password_confirmation: 123 }, token: user.reset_token }
+    patch :update, params: { new_password_form: { password: 123, password_confirmation: 123, reset_token: reset_token } }
 
     assert_redirected_to new_session_path
   end
@@ -23,11 +24,11 @@ class Web::PasswordResetsControllerTest < ActionController::TestCase
     user.create_password_reset_token
     reset_token = user.reset_token
 
-    patch :update, params: { new_password_form: { password: 123, password_confirmation: 123 }, token: user.reset_token }
+    patch :update, params: { new_password_form: { password: 123, password_confirmation: 123, reset_token: reset_token } }
 
     assert_redirected_to new_session_path
 
-    patch :update, params: { new_password_form: { password: 444, password_confirmation: 444 }, token: reset_token }
+    patch :update, params: { new_password_form: { password: 444, password_confirmation: 444, reset_token: reset_token } }
 
     assert_redirected_to new_password_path
   end
@@ -38,7 +39,7 @@ class Web::PasswordResetsControllerTest < ActionController::TestCase
 
     travel 25.hours
 
-    patch :update, params: { new_password_form: { password: 123, password_confirmation: 123 }, token: user.reset_token }
+    patch :update, params: { new_password_form: { password: 123, password_confirmation: 123, reset_token: user.reset_token } }
 
     assert_redirected_to new_password_path
   end
