@@ -12,7 +12,7 @@ class NewPasswordForm
     return false if invalid?
 
     user.update(password_params)
-    user.delete_password_reset_token
+    PasswordResetTokenBuilder.delete_password_reset_token(user)
   end
 
   def token_valid?

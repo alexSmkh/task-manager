@@ -11,35 +11,57 @@ class Web::PasswordResetsControllerTest < ActionController::TestCase
 
   test 'should update password' do
     user = create(:user)
-    user.create_password_reset_token
-    reset_token = user.reset_token
+    PasswordResetTokenBuilder.create_password_reset_token(user)
 
-    patch :update, params: { new_password_form: { password: 123, password_confirmation: 123, reset_token: reset_token } }
+    patch :update, params: {
+      new_password_form: {
+        password: 123,
+        password_confirmation: 123,
+        reset_token: user.reset_token,
+      },
+    }
 
     assert_redirected_to new_session_path
   end
 
   test 'should not update password twice by one token' do
     user = create(:user)
-    user.create_password_reset_token
-    reset_token = user.reset_token
+    PasswordResetTokenBuilder.create_password_reset_token(user)
 
-    patch :update, params: { new_password_form: { password: 123, password_confirmation: 123, reset_token: reset_token } }
+    patch :update, params: {
+      new_password_form: {
+        password: 123,
+        password_confirmation: 123,
+        reset_token: user.reset_token,
+      },
+    }
 
     assert_redirected_to new_session_path
 
-    patch :update, params: { new_password_form: { password: 444, password_confirmation: 444, reset_token: reset_token } }
+    patch :update, params: {
+      new_password_form: {
+        password: 444,
+        password_confirmation: 444,
+        reset_token: user.reset_token,
+      },
+    }
 
     assert_redirected_to new_password_path
   end
 
   test 'should not update password if token has expired' do
     user = create(:user)
-    user.create_password_reset_token
+    PasswordResetTokenBuilder.create_password_reset_token(user)
 
     travel 25.hours
 
-    patch :update, params: { new_password_form: { password: 123, password_confirmation: 123, reset_token: user.reset_token } }
+    patch :update, params: {
+      new_password_form: {
+        password: 123,
+        password_confirmation: 123,
+        reset_token: user.reset_token,
+      },
+    }
 
     assert_redirected_to new_password_path
   end
