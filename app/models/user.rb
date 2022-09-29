@@ -10,8 +10,4 @@ class User < ApplicationRecord
             presence: true,
             uniqueness: true,
             format: { with: URI::MailTo::EMAIL_REGEXP }
-
-  def password_reset_token_expired?
-    Time.zone.now.after?(reset_token_expires_at)
-  end
 end

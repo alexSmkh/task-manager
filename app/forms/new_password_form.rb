@@ -12,14 +12,14 @@ class NewPasswordForm
     return false if invalid?
 
     user.update(password_params)
-    PasswordResetTokenBuilder.delete_password_reset_token(user)
+    PasswordResetService.delete_password_reset_token(user)
   end
 
   def token_valid?
     if user.nil?
       errors.add(:reset_token, 'Reset link has invalid')
       return false
-    elsif user.password_reset_token_expired?
+    elsif PasswordResetService.password_reset_token_expired?(user)
       errors.add(:reset_token, 'Reset link has expired')
       return false
     end

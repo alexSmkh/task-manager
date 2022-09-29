@@ -1,4 +1,4 @@
-module PasswordResetTokenBuilder
+module PasswordResetService
   def self.generate_token
     SecureRandom.urlsafe_base64
   end
@@ -13,5 +13,9 @@ module PasswordResetTokenBuilder
     user.reset_token = nil
     user.reset_token_expires_at = nil
     user.save
+  end
+
+  def self.password_reset_token_expired?(user)
+    Time.zone.now.after?(user.reset_token_expires_at)
   end
 end

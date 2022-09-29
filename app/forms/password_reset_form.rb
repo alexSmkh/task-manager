@@ -9,7 +9,7 @@ class PasswordResetForm
   def request_password_reset_instructions
     return false if invalid?
 
-    PasswordResetTokenBuilder.create_password_reset_token(user)
+    PasswordResetService.create_password_reset_token(user)
 
     UserMailer.with(user: user).password_reset.deliver_now
   end
