@@ -2,21 +2,29 @@ class Web::PasswordResetsController < Web::ApplicationController
   def create
     @password_reset_form = PasswordResetForm.new(password_reset_params)
 
-    if @password_reset_form.valid? && @password_reset_form.request_password_reset_instructions
-      redirect_to(root_path, alert: 'An email has been sent to you with instructions')
-    else
-      render('web/password/new')
-    end
+    return render('web/passwords/new') if @password_reset_form.invalid?
+
+    user = @password_reset_form.user
+
+    PasswordResetService.create_password_reset_token(user)
+
+    UserMailer.with(user: user).password_reset.deliver_now
+
+    redirect_to(root_path, alert: 'An email has been sent to you with instructions')
   end
 
   def update
     @new_password_form = NewPasswordForm.new(password_params)
 
-    if @new_password_form.invalid?
-      redirect_to(new_password_path)
-    else
-      @new_password_form.update_password(password_params.except(:reset_token))
+    return redirect_to(new_password_path, alert: @new_password_form.errors.where(:reset_token).first.message) \
+      if @new_password_form.token_invalid?
+
+    user = @new_password_form.user
+    if user.update(password_params.except(:reset_token))
+      PasswordResetService.delete_password_reset_token(user)
       redirect_to(new_session_path, alert: 'Your password was reset successfully! Please sign in.')
+    else
+      render('web/passwords/edit')
     end
   end
 

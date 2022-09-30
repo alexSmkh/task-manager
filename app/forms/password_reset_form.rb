@@ -6,25 +6,15 @@ class PasswordResetForm
   validates :email, presence: true, format: { with: /\A\S+@.+\.\S+\z/ }
   validate :user_exists?
 
-  def request_password_reset_instructions
-    return false if invalid?
-
-    PasswordResetService.create_password_reset_token(user)
-
-    UserMailer.with(user: user).password_reset.deliver_now
-  end
-
-  private
-
   def user
     @user ||= User.find_by(email: email)
   end
 
+  private
+
   def user_exists?
     if user.nil?
       errors.add(:email, 'User with this email does not exist')
-      return false
     end
-    true
   end
 end
