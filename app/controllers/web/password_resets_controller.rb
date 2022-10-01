@@ -19,13 +19,12 @@ class Web::PasswordResetsController < Web::ApplicationController
     return redirect_to(new_password_path, alert: @new_password_form.errors.where(:reset_token).first.message) \
       if @new_password_form.token_invalid?
 
+    return render('web/passwords/edit') if @new_password_form.invalid?
+
     user = @new_password_form.user
-    if user.update(password_params.except(:reset_token))
-      PasswordResetService.delete_password_reset_token(user)
-      redirect_to(new_session_path, alert: 'Your password was reset successfully! Please sign in.')
-    else
-      render('web/passwords/edit')
-    end
+    user.update(password_params.except(:reset_token))
+    PasswordResetService.delete_password_reset_token(user)
+    redirect_to(new_session_path, alert: 'Your password was reset successfully! Please sign in.')
   end
 
   private
