@@ -28,7 +28,8 @@ class UserMailerTest < ActionMailer::TestCase
   end
 
   test 'task deleted' do
-    email = UserMailer.with(@params).task_deleted
+    params = { email: @user.email, task_id: @task.id }
+    email = UserMailer.with(params).task_deleted
 
     assert_emails(1) { email.deliver_now }
     assert_equal ['noreply@taskmanager.com'], email.from

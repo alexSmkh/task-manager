@@ -13,6 +13,8 @@ end
 
 SimpleCov.start('rails')
 
+Sidekiq::Testing.inline!
+
 class ActiveSupport::TestCase
   include ActionMailer::TestHelper
   include FactoryBot::Syntax::Methods
