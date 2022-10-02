@@ -5,6 +5,7 @@ class NewPasswordForm
   attr_accessor :reset_token, :password_digest, :password_digest_confirmation
 
   has_secure_password
+  validate :token_invalid?
 
   def user
     @user ||= User.find_by(reset_token: reset_token)

@@ -16,10 +16,13 @@ class Web::PasswordResetsController < Web::ApplicationController
   def update
     @new_password_form = NewPasswordForm.new(password_params)
 
-    return redirect_to(new_password_path, alert: @new_password_form.errors.where(:reset_token).first.message) \
-      if @new_password_form.token_invalid?
+    if @new_password_form.invalid?
+      errors = @new_password_form.errors
 
-    return render('web/passwords/edit') if @new_password_form.invalid?
+      return render('web/passwords/edit') if errors.where(:password).present?
+
+      return redirect_to(new_password_path, alert: errors.where(:reset_token).first.message)
+    end
 
     user = @new_password_form.user
     user.update(password_params.slice(:password, :password_confirmation))
@@ -35,5 +38,9 @@ class Web::PasswordResetsController < Web::ApplicationController
 
   def password_params
     params.require(:new_password_form).permit(:password, :password_confirmation, :reset_token)
+  end
+
+  def reset_token_invalid?(token)
+
   end
 end
