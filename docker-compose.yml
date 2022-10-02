@@ -14,6 +14,8 @@ services:
       - 3002:3002
     depends_on:
       - db
+      - redis
+      - sidekiq
     environment: &web-environment
       BUNDLE_PATH: /bundle_cache
       GEM_HOME: /bundle_cache
@@ -23,7 +25,19 @@ services:
       DATABASE_HOST: db
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: postgres
+      REDIS_URL: redis://redis
     command: bundle exec rails s -b '0.0.0.0' -p 3000
+
+  redis:
+    image: redis:5.0.9-alpine
+
+  sidekiq:
+    build: .
+    command: bundle exec sidekiq -C /task_manager/config/sidekiq.yml
+    environment: *web-environment
+    volumes: *web-volumes
+    depends_on:
+      - redis
 
   db:
     image: postgres:11.4
