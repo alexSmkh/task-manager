@@ -22,7 +22,7 @@ class Web::PasswordResetsController < Web::ApplicationController
     return render('web/passwords/edit') if @new_password_form.invalid?
 
     user = @new_password_form.user
-    user.update(password_params.except(:reset_token))
+    user.update(password_params.slice(:password, :password_confirmation))
     PasswordResetService.delete_password_reset_token(user)
     redirect_to(new_session_path, alert: 'Your password was reset successfully! Please sign in.')
   end
