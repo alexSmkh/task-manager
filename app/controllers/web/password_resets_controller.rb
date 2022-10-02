@@ -39,8 +39,4 @@ class Web::PasswordResetsController < Web::ApplicationController
   def password_params
     params.require(:new_password_form).permit(:password, :password_confirmation, :reset_token)
   end
-
-  def reset_token_invalid?(token)
-
-  end
 end
