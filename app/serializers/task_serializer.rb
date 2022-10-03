@@ -13,4 +13,8 @@ class TaskSerializer < ApplicationSerializer
       }
     end
   end
+
+  def image_url
+    object.image.attached? ? AttachmentsService.file_url(object.image) : nil
+  end
 end
