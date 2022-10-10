@@ -38,7 +38,7 @@ class UserMailerTest < ActionMailer::TestCase
   end
 
   test 'password reset' do
-    PasswordResetService.create_password_reset_token(@user)
+    PasswordResetService.create_password_reset_token!(@user)
 
     params = { user: @user }
     email = UserMailer.with(params).password_reset

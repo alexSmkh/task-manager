@@ -6,7 +6,7 @@ class Web::PasswordResetsController < Web::ApplicationController
 
     user = @password_reset_form.user
 
-    PasswordResetService.create_password_reset_token(user)
+    PasswordResetService.create_password_reset_token!(user)
 
     UserMailer.with(user: user).password_reset.deliver_now
 
@@ -26,7 +26,7 @@ class Web::PasswordResetsController < Web::ApplicationController
 
     user = @new_password_form.user
     user.update(password_params.slice(:password, :password_confirmation))
-    PasswordResetService.delete_password_reset_token(user)
+    PasswordResetService.delete_password_reset_token!(user)
     redirect_to(new_session_path, alert: 'Your password was reset successfully! Please sign in.')
   end
 

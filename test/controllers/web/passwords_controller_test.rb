@@ -8,7 +8,7 @@ class Web::PasswordsControllerTest < ActionController::TestCase
 
   test 'should get edit' do
     user = create(:user)
-    PasswordResetService.create_password_reset_token(user)
+    PasswordResetService.create_password_reset_token!(user)
 
     get :edit, params: { token: user.reset_token }
 
@@ -17,7 +17,7 @@ class Web::PasswordsControllerTest < ActionController::TestCase
 
   test 'should not get edit if token has expired' do
     user = create(:user)
-    PasswordResetService.create_password_reset_token(user)
+    PasswordResetService.create_password_reset_token!(user)
 
     travel 24.hours + 1.second
 

@@ -11,7 +11,7 @@ class Web::PasswordResetsControllerTest < ActionController::TestCase
 
   test 'should update password' do
     user = create(:user)
-    PasswordResetService.create_password_reset_token(user)
+    PasswordResetService.create_password_reset_token!(user)
 
     patch :update, params: {
       new_password_form: {
@@ -26,7 +26,7 @@ class Web::PasswordResetsControllerTest < ActionController::TestCase
 
   test 'should not update password twice by one token' do
     user = create(:user)
-    PasswordResetService.create_password_reset_token(user)
+    PasswordResetService.create_password_reset_token!(user)
 
     patch :update, params: {
       new_password_form: {
@@ -51,7 +51,7 @@ class Web::PasswordResetsControllerTest < ActionController::TestCase
 
   test 'should not update password if token has expired' do
     user = create(:user)
-    PasswordResetService.create_password_reset_token(user)
+    PasswordResetService.create_password_reset_token!(user)
 
     travel 25.hours
 
