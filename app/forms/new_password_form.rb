@@ -12,10 +12,8 @@ class NewPasswordForm
   end
 
   def token_invalid?
-    if user.nil?
-      errors.add(:reset_token, 'Reset link has invalid')
-    elsif PasswordResetService.password_reset_token_expired?(user)
-      errors.add(:reset_token, 'Reset link has expired')
-    end
+    return errors.add(:reset_token, 'Reset link has invalid') if user.nil?
+
+    return errors.add(:reset_token, 'Reset link has expired') if PasswordResetService.password_reset_token_expired?(user)
   end
 end

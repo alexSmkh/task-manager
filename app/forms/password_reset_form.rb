@@ -13,8 +13,6 @@ class PasswordResetForm
   private
 
   def user_exists?
-    if user.nil?
-      errors.add(:email, 'User with this email does not exist')
-    end
+    return errors.add(:email, 'User with this email does not exist') if user.nil?
   end
 end
