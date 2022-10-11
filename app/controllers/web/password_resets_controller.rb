@@ -10,8 +10,6 @@ class Web::PasswordResetsController < Web::ApplicationController
 
     SendPasswordResetInstructionsJob.perform_async(user.email, user.reset_token)
 
-    # UserMailer.with(user: user).password_reset.deliver_now
-
     redirect_to(root_path, alert: 'An email has been sent to you with instructions')
   end
 
