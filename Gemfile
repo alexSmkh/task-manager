@@ -18,6 +18,9 @@ gem 'ransack', github: 'activerecord-hackery/ransack', branch: 'main'
 gem 'responders'
 gem 'rollbar'
 gem 'sass-rails', '>= 6'
+gem 'sidekiq'
+gem 'sidekiq-throttled'
+gem 'sidekiq-unique-jobs'
 gem 'simple_form'
 gem 'slim-rails'
 gem 'state_machines'
@@ -30,6 +33,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'factory_bot_rails'
   gem 'rubocop'
+  gem 'sidekiq-failures'
 end
 
 group :development do
